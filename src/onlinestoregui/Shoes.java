@@ -9,19 +9,19 @@ package onlinestoregui;
  * @author petersun
  */
 public class Shoes extends Product {
-    private String size;
+    private int size;
 
-    public Shoes(int id, String name, double price, String size) {
+    public Shoes(int id, String name, double price, int size) {
         super(id, name, price);
         this.size = size;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (Size: " + size + ")";
+        return getName() + " (Size: " + size + ")";
     }
 }

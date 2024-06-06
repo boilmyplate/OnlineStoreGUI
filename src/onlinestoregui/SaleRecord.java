@@ -9,47 +9,46 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class SaleRecord {
-    private Date date;
+    private List<CartItem> items;
     private String customerName;
-    private Product product;
-    private int quantity;
-    private double totalPrice;
 
-    public SaleRecord(String customerName, Product product, int quantity, double totalPrice) {
-        this.date = new Date(); // Assign the current date when the SaleRecord object is created
+    public SaleRecord(List<CartItem> items, String customerName) {
+        this.items = items;
         this.customerName = customerName;
-        this.product = product;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
+        System.out.println("SaleRecord initialized for customer: " + customerName);
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("%s \nCustomer: %s \nItem: %s \nQuantity: %d \nTotal: $%.2f\n", 
-                date.toString(), customerName, product.toString(), quantity, totalPrice);
+    public void save() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("SalesRecord.txt", true))) {
+            String timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(new Date());
+            writer.write(timestamp);
+            writer.newLine();
+            writer.write("Customer: " + customerName);
+            writer.newLine();
+            double total = 0;
+            for (CartItem item : items) {
+                writer.write("Item: " + item.getProduct().getName());
+                writer.newLine();
+                writer.write("Quantity: " + item.getQuantity());
+                writer.newLine();
+                double itemTotal = item.getQuantity() * item.getProduct().getPrice();
+                writer.write("Total: $" + itemTotal);
+                writer.newLine();
+                total += itemTotal;
+            }
+            writer.write("Grand Total: $" + total);
+            writer.newLine();
+            writer.write("----");
+            writer.newLine();
+            System.out.println("Record saved for customer: " + customerName);
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the record: " + e.getMessage());
+        }
     }
 }

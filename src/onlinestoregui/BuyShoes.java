@@ -17,39 +17,6 @@ import java.util.Scanner;
  */
 public class BuyShoes {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        OnlineStore sneakerStore = new OnlineStoreGUI();
-
-        sneakerStore.displayWelcomeMessage();
-        sneakerStore.displayProducts();
-
-        int shoeNumber = getShoeNumber(scanner, sneakerStore);
-        int quantity = getQuantity(scanner);
-
-        // Retrieve the chosen shoe
-        Product chosenShoe = sneakerStore.chooseProduct(shoeNumber);
-
-        // Perform checkout
-        double totalPrice = sneakerStore.checkout(chosenShoe, quantity);
-
-        // Ask for customer details
-        System.out.print("\nPlease enter your name: ");
-        String name = scanner.nextLine();
-
-        // Save sale record
-        SaleRecord saleRecord = new SaleRecord(name, chosenShoe, quantity, totalPrice);
-        sneakerStore.saveSaleRecord(saleRecord);
-
-        System.out.printf("\nThank you for shopping with us %s! Please see your receipt below!\n\n", name);
-        
-        System.out.println(sneakerStore.getSaleRecordAsString(0));
-
-        saveSaleRecordToFile(sneakerStore.getSaleRecordAsString(0));
-
-        scanner.close();
-    }
-
     private static int getShoeNumber(Scanner scanner, OnlineStore sneakerStore) {
         int shoeNumber = 0;
         do {
@@ -95,7 +62,7 @@ public class BuyShoes {
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write(saleRecord);
-            bw.newLine(); // Add a newline for readability
+            bw.newLine(); 
             bw.close();
 
         } catch (IOException e) {

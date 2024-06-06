@@ -1,0 +1,13 @@
+Thu Jun 06 11:54:08 NZST 2024
+Customer: Peter
+Receipt:
+1 x New Balance 530 - $100.0
+Total: $100.0
+----
+Thu Jun 06 11:55:57 NZST 2024
+Customer: peter
+Receipt:
+6 x Air Jordan 1 - $150.0
+7 x New Balance 530 - $100.0
+Total: $1600.0
+----
