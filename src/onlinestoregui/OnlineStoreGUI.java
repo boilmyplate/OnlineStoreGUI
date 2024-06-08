@@ -155,13 +155,16 @@ public class OnlineStoreGUI {
         System.out.println("Starting Online Store GUI...");
         try {
             OnlineStore store = new OnlineStore();
-            /*
+            
+            
+            // Used to add products to database. Only need to run once.
+            
             store.addProduct(new Shoes(1, "Air Jordan 1", 150, 10));
             store.addProduct(new Shoes(2, "Panda Dunk Low", 120, 9));
             store.addProduct(new Shoes(3, "New Balance 530", 100, 11));
-            */
             
-            new OnlineStoreGUI(store);
+            
+            OnlineStoreGUI onlineStoreGUI = new OnlineStoreGUI(store);
             System.out.println("GUI initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
         }

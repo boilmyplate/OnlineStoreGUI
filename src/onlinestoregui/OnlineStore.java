@@ -36,21 +36,21 @@ public class OnlineStore {
             int id = resultSet.getInt("ID");
             String name = resultSet.getString("NAME");
             double price = resultSet.getDouble("PRICE");
-            String imagePath = resultSet.getString("IMAGE_PATH");
-            products.add(new Product(id, name, price, imagePath));
+            int shoeSize = resultSet.getInt("IMAGE_PATH");
+            products.add(new Product(id, name, price, shoeSize));
         }
         System.out.println("Products loaded from database");
     }
 
     public void addProduct(Product product) throws SQLException {
         products.add(product);
-        String insertSQL = "INSERT INTO Products (ID, NAME, PRICE, IMAGE_PATH) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO Products (ID, NAME, PRICE, SIZE) VALUES (?, ?, ?, ?)";
         Connection connection = (Connection) dbManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(insertSQL);
         statement.setInt(1, product.getId());
         statement.setString(2, product.getName());
         statement.setDouble(3, product.getPrice());
-        statement.setString(4, product.getImagePath());
+        statement.setInt(4, product.getShoeSize());
         statement.executeUpdate();
         System.out.println("Product added: " + product.getName());
     }
