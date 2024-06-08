@@ -3,24 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package onlinestoregui;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
  * @author petersun
  */
 public class OnlineStoreGUI {
+
     private OnlineStore store;
     private JFrame frame;
     private JList<Product> productList;
@@ -171,7 +170,6 @@ public class OnlineStoreGUI {
             store.addProduct(new Shoes(2, "Panda Dunk Low", 120, 9));
             store.addProduct(new Shoes(3, "New Balance 530", 100, 11));
 
-            new OnlineStoreGUI(store);
             System.out.println("GUI initialized successfully.");
         } catch (Exception e) {
             e.printStackTrace();
