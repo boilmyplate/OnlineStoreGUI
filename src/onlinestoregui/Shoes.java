@@ -22,6 +22,6 @@ public class Shoes extends Product {
 
     @Override
     public String toString() {
-        return getName() + " (Size: " + size + ")";
+        return getName() + ": $"+ getPrice() + " (Size: " + size + ")";
     }
 }

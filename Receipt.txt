@@ -62,3 +62,9 @@ Receipt:
 12 x Panda Dunk Low - $120.0
 Total: $1440.0
 ----
+Sat Jun 08 21:36:50 NZST 2024
+Customer: mee
+Receipt:
+2 x Lunar Glieds - $169.99
+Total: $339.98
+----

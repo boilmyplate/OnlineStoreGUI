@@ -82,17 +82,19 @@ public class DatabaseManager {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         DatabaseManager db = new DatabaseManager();
         db.connect();
-        
+
         OnlineStore store = new OnlineStore();
-        
+
         // Used to add products to database. Only need to run once.
-        
         /*
         store.addShoes(new Shoes(1, "Air Jordan 1", 150, 10));
         store.addShoes(new Shoes(2, "Panda Dunk Low", 120, 9));
         store.addShoes(new Shoes(3, "New Balance 530", 100, 11));
-        */
-        
+        store.addShoes(new Shoes(4, "Astro Boots", 3000, 8));
+        store.addShoes(new Shoes(5, "Gala Gaiters", 1700, 10));
+        store.addShoes(new Shoes(6, "Lunar Glieds", 170, 7));
+        store.addShoes(new Shoes(7, "EcoTreads", 90, 19));
+         */
 //                db.createTables();
 //                db.addColumn();
 //                db.dropColumn();
