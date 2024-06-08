@@ -14,16 +14,15 @@ import java.sql.*;
  */
 public class OnlineStore {
 
-    private List<Product> products;
-    private Cart cart;
-    private DatabaseManager dbManager;
+    private final List<Product> products;
+    private final Cart cart;
+    private final DatabaseManager dbManager;
 
     public OnlineStore() throws SQLException, ClassNotFoundException {
         products = new ArrayList<>();
         cart = new Cart();
         dbManager = new DatabaseManager();
-        dbManager.connect();
-        dbManager.createTables();
+        dbManager.connect(); // connect to database
         loadProducts();
     }
 
@@ -55,15 +54,6 @@ public class OnlineStore {
         statement.executeUpdate();
         System.out.println("Product added: " + product.getName());
     }
-
-    /*
-    
-    public void addProduct(Product product) {
-        products.add(product);
-        System.out.println("Product added: " + product.getName());
-    }
-    
-    */
 
     public List<Product> getProducts() {
         return products;

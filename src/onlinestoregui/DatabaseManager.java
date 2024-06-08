@@ -18,10 +18,6 @@ public class DatabaseManager {
 
     private Connection connection;
 
-    public DatabaseManager() {
-
-    }
-
     public void connect() throws SQLException, ClassNotFoundException {
         Class.forName("org.apache.derby.jdbc.AutoloadedDriver");
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -29,24 +25,34 @@ public class DatabaseManager {
     }
 
     public void createTables() throws SQLException {
-        String createProductTableSQL = "CREATE TABLE Products ("
-                + "ID INT PRIMARY KEY, "
-                + "NAME VARCHAR(255), "
-                + "PRICE DOUBLE, "
-                + "IMAGE_PATH VARCHAR(255))";
+        if (!isTableExists("Products") || !isTableExists("Sales")) {
+            String createProductTableSQL = "CREATE TABLE Products ("
+                    + "ID INT PRIMARY KEY, "
+                    + "NAME VARCHAR(255), "
+                    + "PRICE DOUBLE, "
+                    + "IMAGE_PATH VARCHAR(255))";
 
-        String createSalesTableSQL = "CREATE TABLE Sales ("
-                + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
-                + "CUSTOMER_NAME VARCHAR(255), "
-                + "PRODUCT_ID INT, "
-                + "QUANTITY INT, "
-                + "TOTAL DOUBLE, "
-                + "SALE_DATE TIMESTAMP)";
+            String createSalesTableSQL = "CREATE TABLE Sales ("
+                    + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
+                    + "CUSTOMER_NAME VARCHAR(255), "
+                    + "PRODUCT_ID INT, "
+                    + "QUANTITY INT, "
+                    + "TOTAL DOUBLE, "
+                    + "SALE_DATE TIMESTAMP)";
 
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(createProductTableSQL);
-        statement.executeUpdate(createSalesTableSQL);
-        System.out.println("Tables created");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(createProductTableSQL);
+            statement.executeUpdate(createSalesTableSQL);
+            System.out.println("Tables created");
+        } else {
+            System.out.println("Tables already exists");
+        }
+    }
+
+    private boolean isTableExists(String tableName) throws SQLException {
+        DatabaseMetaData dbMetaData = connection.getMetaData();
+        ResultSet tables = dbMetaData.getTables(null, null, tableName.toUpperCase(), null);
+        return tables.next();
     }
 
     public Connection getConnection() {
