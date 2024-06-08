@@ -12,7 +12,6 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    private int size; // Add this field
 
     public Product(int id, String name, double price) {
         this.id = id;
@@ -23,7 +22,6 @@ public class Product {
     // New constructor to include image path
     public Product(int id, String name, double price, int size) {
         this(id, name, price);
-        this.size = size;
     }
 
     // Getters
@@ -37,9 +35,5 @@ public class Product {
 
     public double getPrice() {
         return price;
-    }
-
-    public int getShoeSize() {
-        return size;
     }
 }

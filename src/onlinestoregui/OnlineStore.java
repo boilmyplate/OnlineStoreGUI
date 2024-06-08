@@ -36,23 +36,23 @@ public class OnlineStore {
             int id = resultSet.getInt("ID");
             String name = resultSet.getString("NAME");
             double price = resultSet.getDouble("PRICE");
-            int shoeSize = resultSet.getInt("IMAGE_PATH");
-            products.add(new Product(id, name, price, shoeSize));
+            int shoeSize = resultSet.getInt("SIZE");
+            products.add(new Shoes(id, name, price, shoeSize));
         }
         System.out.println("Products loaded from database");
     }
 
-    public void addProduct(Product product) throws SQLException {
-        products.add(product);
+    public void addShoes(Shoes shoe) throws SQLException {
+        products.add(shoe);
         String insertSQL = "INSERT INTO Products (ID, NAME, PRICE, SIZE) VALUES (?, ?, ?, ?)";
-        Connection connection = (Connection) dbManager.getConnection();
+        Connection connection = dbManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(insertSQL);
-        statement.setInt(1, product.getId());
-        statement.setString(2, product.getName());
-        statement.setDouble(3, product.getPrice());
-        statement.setInt(4, product.getShoeSize());
+        statement.setInt(1, shoe.getId());
+        statement.setString(2, shoe.getName());
+        statement.setDouble(3, shoe.getPrice());
+        statement.setInt(4, shoe.getShoeSize());
         statement.executeUpdate();
-        System.out.println("Product added: " + product.getName());
+        System.out.println("Product added: " + shoe.getName());
     }
 
     public List<Product> getProducts() {
@@ -69,6 +69,9 @@ public class OnlineStore {
     }
 
     public void saveRecords(String customerName) {
+        
+        
+        
         SaleRecord saleRecord = new SaleRecord(cart.getItems(), customerName);
         saleRecord.save();
         System.out.println("Records saved for customer: " + customerName);
@@ -81,5 +84,9 @@ public class OnlineStore {
     public void clearCart() {
         cart.clearItems();
         System.out.println("Cart cleared.");
+    }
+    
+    public void dbShutdown() throws SQLException {
+        dbManager.disconnect();
     }
 }

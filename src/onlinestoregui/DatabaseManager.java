@@ -19,18 +19,20 @@ public class DatabaseManager {
     private Connection connection;
 
     public void connect() throws SQLException, ClassNotFoundException {
+        Class.forName("org.apache.derby.jdbc.AutoloadedDriver");
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
         System.out.println("Connected to the database");
     }
 
     public void createTables() throws SQLException {
-        String createProductTableSQL = "CREATE TABLE IF NOT EXISTS Products ("
+        String createProductTableSQL = "CREATE TABLE Products ("
                 + "ID INT PRIMARY KEY, "
                 + "NAME VARCHAR(255), "
                 + "PRICE DOUBLE, "
-                + "SIZE INT)";
+                + "SIZE INT, "
+                + ")";
 
-        String createSalesTableSQL = "CREATE TABLE IF NOT EXISTS Sales ("
+        String createSalesTableSQL = "CREATE TABLE Sales ("
                 + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
                 + "CUSTOMER_NAME VARCHAR(255), "
                 + "PRODUCT_ID INT, "
@@ -80,9 +82,21 @@ public class DatabaseManager {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         DatabaseManager db = new DatabaseManager();
         db.connect();
+        
+        OnlineStore store = new OnlineStore();
+        
+        // Used to add products to database. Only need to run once.
+        
+        /*
+        store.addShoes(new Shoes(1, "Air Jordan 1", 150, 10));
+        store.addShoes(new Shoes(2, "Panda Dunk Low", 120, 9));
+        store.addShoes(new Shoes(3, "New Balance 530", 100, 11));
+        */
+        
 //                db.createTables();
 //                db.addColumn();
 //                db.dropColumn();
-        db.deleteData();
+//        db.deleteData();
+        db.disconnect();
     }
 }

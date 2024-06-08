@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package onlinestoregui;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import java.util.Date;
  * @author petersun
  */
 public class OnlineStoreGUI {
+
     private OnlineStore store;
     private JFrame frame;
     private JList<Product> productList;
@@ -102,12 +104,12 @@ public class OnlineStoreGUI {
                     totalAmount += item.getQuantity() * item.getProduct().getPrice();
                 }
                 receipt.append("Total: $").append(totalAmount).append("\n");
-                
+
                 JOptionPane.showMessageDialog(frame, "Total: $" + totalAmount, "Checkout", JOptionPane.INFORMATION_MESSAGE);
-                
+
                 // Save the receipt to a file
                 saveRecords(receipt.toString());
-                
+
                 store.clearCart();
                 updateCartDisplay();
             } else {
@@ -155,18 +157,11 @@ public class OnlineStoreGUI {
         System.out.println("Starting Online Store GUI...");
         try {
             OnlineStore store = new OnlineStore();
-            
-            
-            // Used to add products to database. Only need to run once.
-            
-            store.addProduct(new Shoes(1, "Air Jordan 1", 150, 10));
-            store.addProduct(new Shoes(2, "Panda Dunk Low", 120, 9));
-            store.addProduct(new Shoes(3, "New Balance 530", 100, 11));
-            
-            
-            OnlineStoreGUI onlineStoreGUI = new OnlineStoreGUI(store);
+
+            new OnlineStoreGUI(store);
             System.out.println("GUI initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
     }
 }
