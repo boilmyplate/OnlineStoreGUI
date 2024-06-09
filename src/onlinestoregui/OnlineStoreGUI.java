@@ -155,13 +155,24 @@ public class OnlineStoreGUI {
 
     public static void main(String[] args) {
         System.out.println("Starting Online Store GUI...");
+        OnlineStore store = null;
+
         try {
-            OnlineStore store = new OnlineStore();
+            store = new OnlineStore();
 
             new OnlineStoreGUI(store);
             System.out.println("GUI initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (store != null) {
+                try {
+                    store.dbCommit();
+                    store.dbShutdown();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

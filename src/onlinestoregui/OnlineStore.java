@@ -7,6 +7,8 @@ package onlinestoregui;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -69,9 +71,7 @@ public class OnlineStore {
     }
 
     public void saveRecords(String customerName) {
-        
-        
-        
+
         SaleRecord saleRecord = new SaleRecord(cart.getItems(), customerName);
         saleRecord.save();
         System.out.println("Records saved for customer: " + customerName);
@@ -86,7 +86,20 @@ public class OnlineStore {
         System.out.println("Cart cleared.");
     }
     
+    public void dbCommit() {
+        dbManager.commitChanges();
+    }
+
     public void dbShutdown() throws SQLException {
         dbManager.disconnect();
+    }
+    
+    public void createTables() {
+        try {
+            dbManager.createTables();
+            System.out.println("Create tables");
+        } catch (SQLException ex) {
+            Logger.getLogger(OnlineStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

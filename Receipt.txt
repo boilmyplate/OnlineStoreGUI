@@ -68,3 +68,9 @@ Receipt:
 2 x Lunar Glieds - $169.99
 Total: $339.98
 ----
+Sun Jun 09 13:40:27 NZST 2024
+Customer: asdasd
+Receipt:
+1 x EcoTreads - $90.0
+Total: $90.0
+----

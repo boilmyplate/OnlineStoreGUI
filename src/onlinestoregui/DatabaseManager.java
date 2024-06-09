@@ -5,6 +5,8 @@
 package onlinestoregui;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +21,7 @@ public class DatabaseManager {
     private Connection connection;
 
     public void connect() throws SQLException, ClassNotFoundException {
-        Class.forName("org.apache.derby.jdbc.AutoloadedDriver");
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
         System.out.println("Connected to the database");
     }
@@ -29,8 +31,7 @@ public class DatabaseManager {
                 + "ID INT PRIMARY KEY, "
                 + "NAME VARCHAR(255), "
                 + "PRICE DOUBLE, "
-                + "SIZE INT, "
-                + ")";
+                + "SIZE INT)";
 
         String createSalesTableSQL = "CREATE TABLE Sales ("
                 + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
@@ -40,31 +41,33 @@ public class DatabaseManager {
                 + "TOTAL DOUBLE, "
                 + "SALE_DATE TIMESTAMP)";
 
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(createProductTableSQL);
-        statement.executeUpdate(createSalesTableSQL);
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(createProductTableSQL);
+            stmt.executeUpdate(createSalesTableSQL);
+            System.out.println("Tables created");
+        }
     }
 
     public void addColumn() throws SQLException {
-        Statement statement = connection.createStatement();
+        Statement stmt = connection.createStatement();
         String addColumn = "ALTER TABLE Products ADD COLUMN SIZE INT";
-        statement.executeUpdate(addColumn);
+        stmt.executeUpdate(addColumn);
         System.out.println("Added column \"SIZE\"");
     }
 
     public void dropColumn() throws SQLException {
-        Statement statement = connection.createStatement();
+        Statement stmt = connection.createStatement();
         String dropColumn = "ALTER TABLE Products DROP COLUMN IMAGE_PATH";
-        statement.executeUpdate(dropColumn);
+        stmt.executeUpdate(dropColumn);
         System.out.println("Dropped column \"IMAGE_PATH\"");
     }
 
     // run if you want to reset a table and reinsert all data
     // replace table name in deleteData
     public void deleteData() throws SQLException {
-        Statement statement = connection.createStatement();
+        Statement stmt = connection.createStatement();
         String deleteData = "DELETE FROM Products";
-        statement.executeUpdate(deleteData);
+        stmt.executeUpdate(deleteData);
         System.out.println("Deleted all data in table \"Products\"");
     }
 
@@ -72,33 +75,64 @@ public class DatabaseManager {
         return connection;
     }
 
-    public void disconnect() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-            System.out.println("Disconnected from the database");
+    public void commitChanges() {
+        try {
+            connection.commit();
+            System.out.println("Commited changes");
+        } catch (SQLException e) {
+            Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public void disconnect() {
+        if (connection != null) {
+            try {
+                connection.close();
+//                DriverManager.getConnection("jdbc:derby:;shutdown=true");
+                System.out.println("Database shut down normally");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DatabaseManager db = new DatabaseManager();
-        db.connect();
-
-        OnlineStore store = new OnlineStore();
-
-        // Used to add products to database. Only need to run once.
-        /*
-        store.addShoes(new Shoes(1, "Air Jordan 1", 150, 10));
-        store.addShoes(new Shoes(2, "Panda Dunk Low", 120, 9));
-        store.addShoes(new Shoes(3, "New Balance 530", 100, 11));
-        store.addShoes(new Shoes(4, "Astro Boots", 3000, 8));
-        store.addShoes(new Shoes(5, "Gala Gaiters", 1700, 10));
-        store.addShoes(new Shoes(6, "Lunar Glieds", 170, 7));
-        store.addShoes(new Shoes(7, "EcoTreads", 90, 19));
-         */
-//                db.createTables();
+        try {
+/*
+            DatabaseManager db = new DatabaseManager();
+            db.connect();
+//            db.createTables();
 //                db.addColumn();
 //                db.dropColumn();
-//        db.deleteData();
-        db.disconnect();
+            db.deleteData();
+
+            db.commitChanges();
+            db.disconnect();
+*/
+
+
+
+
+            OnlineStore store = new OnlineStore();
+            // Used to add products to database. Only need to run once.
+
+            store.addShoes(new Shoes(1, "Air Jordan 1", 150, 10));
+            store.addShoes(new Shoes(2, "Panda Dunk Low", 120, 9));
+            store.addShoes(new Shoes(3, "New Balance 530", 100, 11));
+            store.addShoes(new Shoes(4, "Astro Boots", 3000, 8));
+            store.addShoes(new Shoes(5, "Gala Gaiters", 1700, 10));
+            store.addShoes(new Shoes(6, "Lunar Glieds", 170, 7));
+            store.addShoes(new Shoes(7, "EcoTreads", 90, 10));
+
+
+
+//            store.createTables();
+            // shutdown database
+            store.dbCommit();
+            store.dbShutdown();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
