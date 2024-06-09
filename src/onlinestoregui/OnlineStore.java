@@ -71,7 +71,6 @@ public class OnlineStore {
     }
 
     public void saveRecords(String customerName) {
-
         SaleRecord saleRecord = new SaleRecord(cart.getItems(), customerName);
         saleRecord.save();
         System.out.println("Records saved for customer: " + customerName);
@@ -85,7 +84,7 @@ public class OnlineStore {
         cart.clearItems();
         System.out.println("Cart cleared.");
     }
-    
+
     public void dbCommit() {
         dbManager.commitChanges();
     }

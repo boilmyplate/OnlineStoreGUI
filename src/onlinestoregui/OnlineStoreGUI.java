@@ -70,6 +70,7 @@ public class OnlineStoreGUI {
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
 
+        // Action listeners for the buttons
         addToCartButton.addActionListener(this::addToCart);
         clearCartButton.addActionListener(this::clearCart);
         checkoutButton.addActionListener(this::checkout);
@@ -78,9 +79,11 @@ public class OnlineStoreGUI {
         frame.pack();
         frame.setVisible(true);
 
-        displayProducts(); // Populate the product list
+        // Self-explanatory, it displays the products
+        displayProducts();
     }
 
+    // Add to cart method
     private void addToCart(ActionEvent e) {
         int selectedIndex = productList.getSelectedIndex();
         if (store.isValidProduct(selectedIndex)) {
@@ -88,6 +91,10 @@ public class OnlineStoreGUI {
             int quantity;
             try {
                 quantity = Integer.parseInt(quantityField.getText());
+                if (quantity <= 0) {
+                    JOptionPane.showMessageDialog(frame, "Please enter a valid quantity.");
+                    return;
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "Please enter a valid quantity.");
                 return;

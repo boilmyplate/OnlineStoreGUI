@@ -91,3 +91,10 @@ Receipt:
 -1 x Lunar Glieds: $170.0 (Size: 7)
 Total: $-170.0
 ----
+Sun Jun 09 19:28:41 NZST 2024
+Customer: MrBeast
+Receipt:
+3 x Astro Boots: $3000.0 (Size: 8)
+9999 x EcoTreads: $90.0 (Size: 10)
+Total: $908910.0
+----
