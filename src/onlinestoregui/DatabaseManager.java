@@ -88,7 +88,6 @@ public class DatabaseManager {
         if (connection != null) {
             try {
                 connection.close();
-//                DriverManager.getConnection("jdbc:derby:;shutdown=true");
                 System.out.println("Database shut down normally");
             } catch (SQLException e) {
                 e.printStackTrace();

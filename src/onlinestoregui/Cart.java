@@ -10,7 +10,7 @@ import java.util.List;
  * @author petersun
  */
 public class Cart {
-    private List<CartItem> items;
+    private final List<CartItem> items;
 
     public Cart() {
         items = new ArrayList<>();

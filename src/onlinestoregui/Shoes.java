@@ -9,6 +9,7 @@ package onlinestoregui;
  * @author petersun
  */
 public class Shoes extends Product {
+
     private final int size;
 
     public Shoes(int id, String name, double price, int size) {
@@ -22,6 +23,6 @@ public class Shoes extends Product {
 
     @Override
     public String toString() {
-        return getName() + ": $"+ getPrice() + " (Size: " + size + ")";
+        return super.toString() + " (Size: " + size + ")";
     }
 }

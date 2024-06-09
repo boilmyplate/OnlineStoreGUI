@@ -12,8 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class SaleRecord {
-    private List<CartItem> items;
-    private String customerName;
+    private final List<CartItem> items;
+    private final String customerName;
 
     public SaleRecord(List<CartItem> items, String customerName) {
         this.items = items;

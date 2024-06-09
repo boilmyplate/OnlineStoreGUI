@@ -42,6 +42,7 @@ public class OnlineStoreGUI {
         clearCartButton = new JButton("Clear Cart");
         quantityField = new JTextField(5);
         cartArea = new JTextArea(10, 30);
+        cartArea.setEditable(false); // make cart area field read only
 
         // Display welcome message
         JOptionPane.showMessageDialog(frame, "Hello, welcome to PJ Sneaker Store", "Welcome", JOptionPane.INFORMATION_MESSAGE);
@@ -69,59 +70,67 @@ public class OnlineStoreGUI {
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(southPanel, BorderLayout.SOUTH);
 
-        addToCartButton.addActionListener((ActionEvent e) -> {
-            int selectedIndex = productList.getSelectedIndex();
-            if (store.isValidProduct(selectedIndex)) {
-                Product selectedProduct = productList.getModel().getElementAt(selectedIndex);
-                int quantity;
-                try {
-                    quantity = Integer.parseInt(quantityField.getText());
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Please enter a valid quantity.");
-                    return;
-                }
-                store.addToCart(selectedProduct, quantity);
-                updateCartDisplay();
-                JOptionPane.showMessageDialog(frame, selectedProduct.getName() + " added to cart.");
-            } else {
-                JOptionPane.showMessageDialog(frame, "Please select a product to add to the cart.");
-            }
-        });
-
-        clearCartButton.addActionListener((ActionEvent e) -> {
-            store.getCart().clearItems();
-            updateCartDisplay();
-            JOptionPane.showMessageDialog(frame, "Cart cleared.");
-        });
-
-        checkoutButton.addActionListener((ActionEvent e) -> {
-            customerName = JOptionPane.showInputDialog(frame, "Enter customer name:", "Customer Name", JOptionPane.PLAIN_MESSAGE);
-            if (customerName != null && !customerName.trim().isEmpty()) {
-                StringBuilder receipt = new StringBuilder("Receipt:\n");
-                totalAmount = 0;
-                for (CartItem item : store.getCart().getItems()) {
-                    receipt.append(item.getQuantity()).append(" x ").append(item.getProduct().getName()).append(" - $").append(item.getProduct().getPrice()).append("\n");
-                    totalAmount += item.getQuantity() * item.getProduct().getPrice();
-                }
-                receipt.append("Total: $").append(totalAmount).append("\n");
-
-                JOptionPane.showMessageDialog(frame, "Total: $" + totalAmount, "Checkout", JOptionPane.INFORMATION_MESSAGE);
-
-                // Save the receipt to a file
-                saveRecords(receipt.toString());
-
-                store.clearCart();
-                updateCartDisplay();
-            } else {
-                JOptionPane.showMessageDialog(frame, "Customer name cannot be empty.");
-            }
-        });
+        addToCartButton.addActionListener(this::addToCart);
+        clearCartButton.addActionListener(this::clearCart);
+        checkoutButton.addActionListener(this::checkout);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
 
         displayProducts(); // Populate the product list
+    }
+
+    private void addToCart(ActionEvent e) {
+        int selectedIndex = productList.getSelectedIndex();
+        if (store.isValidProduct(selectedIndex)) {
+            Product selectedProduct = productList.getModel().getElementAt(selectedIndex);
+            int quantity;
+            try {
+                quantity = Integer.parseInt(quantityField.getText());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid quantity.");
+                return;
+            }
+            store.addToCart(selectedProduct, quantity);
+            updateCartDisplay();
+            JOptionPane.showMessageDialog(frame, selectedProduct.getName() + " added to cart.");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Please select a product to add to the cart.");
+        }
+    }
+
+    private void clearCart(ActionEvent e) {
+        store.getCart().clearItems();
+        updateCartDisplay();
+        JOptionPane.showMessageDialog(frame, "Cart cleared.");
+    }
+
+    private void checkout(ActionEvent e) {
+        if (store.getCart().getItems().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Your cart is empty. Please add items to the cart before checking out.");
+            return;
+        }
+
+        customerName = JOptionPane.showInputDialog(frame, "Enter customer name:", "Customer Name", JOptionPane.PLAIN_MESSAGE);
+        if (customerName != null && !customerName.trim().isEmpty()) {
+            StringBuilder receipt = new StringBuilder("Receipt:\n");
+            double totalAmount = 0;
+            for (CartItem item : store.getCart().getItems()) {
+                receipt.append(item.toString()).append("\n");
+                totalAmount += item.getQuantity() * item.getProduct().getPrice();
+            }
+            receipt.append("Total: $").append(totalAmount).append("\n");
+
+            JOptionPane.showMessageDialog(frame, "Total: $" + totalAmount, "Checkout", JOptionPane.INFORMATION_MESSAGE);
+
+            saveRecords(receipt.toString());
+
+            store.clearCart();
+            updateCartDisplay();
+        } else {
+            JOptionPane.showMessageDialog(frame, "Customer name cannot be empty.");
+        }
     }
 
     private void displayProducts() {
@@ -135,7 +144,7 @@ public class OnlineStoreGUI {
     private void updateCartDisplay() {
         StringBuilder cartContent = new StringBuilder();
         for (CartItem item : store.getCart().getItems()) {
-            cartContent.append(item.getQuantity()).append(" x ").append(item.getProduct().getName()).append(" - $").append(item.getProduct().getPrice()).append("\n");
+            cartContent.append(item.toString()).append("\n");
         }
         cartArea.setText(cartContent.toString());
     }
@@ -154,25 +163,13 @@ public class OnlineStoreGUI {
     }
 
     public static void main(String[] args) {
-        System.out.println("Starting Online Store GUI...");
-        OnlineStore store = null;
-
         try {
-            store = new OnlineStore();
-
+            System.out.println("Starting Online Store GUI...");
+            OnlineStore store = new OnlineStore();
             new OnlineStoreGUI(store);
             System.out.println("GUI initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (store != null) {
-                try {
-                    store.dbCommit();
-                    store.dbShutdown();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }

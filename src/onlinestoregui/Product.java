@@ -9,6 +9,7 @@ package onlinestoregui;
  * @author petersun
  */
 public class Product {
+
     private final int id;
     private final String name;
     private final double price;
@@ -30,5 +31,10 @@ public class Product {
 
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return name + ": $" + price;
     }
 }

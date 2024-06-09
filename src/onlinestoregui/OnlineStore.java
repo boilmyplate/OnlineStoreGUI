@@ -93,13 +93,4 @@ public class OnlineStore {
     public void dbShutdown() throws SQLException {
         dbManager.disconnect();
     }
-    
-    public void createTables() {
-        try {
-            dbManager.createTables();
-            System.out.println("Create tables");
-        } catch (SQLException ex) {
-            Logger.getLogger(OnlineStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

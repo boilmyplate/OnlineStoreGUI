@@ -74,3 +74,20 @@ Receipt:
 1 x EcoTreads - $90.0
 Total: $90.0
 ----
+Sun Jun 09 19:15:32 NZST 2024
+Customer: test
+Receipt:
+1 x Gala Gaiters: $1700.0 (Size: 10)
+Total: $1700.0
+----
+Sun Jun 09 19:15:52 NZST 2024
+Customer: no
+Receipt:
+Total: $0.0
+----
+Sun Jun 09 19:22:04 NZST 2024
+Customer: what
+Receipt:
+-1 x Lunar Glieds: $170.0 (Size: 7)
+Total: $-170.0
+----
