@@ -8,8 +8,9 @@ package onlinestoregui;
  *
  * @author petersun
  */
-public class Product {
 
+// This class represents a product in the online store
+public class Product {
     private final int id;
     private final String name;
     private final double price;
@@ -20,7 +21,7 @@ public class Product {
         this.price = price;
     }
 
-    // Getters
+    // Getters for product properties
     public int getId() {
         return id;
     }

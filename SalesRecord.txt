@@ -14,3 +14,52 @@ Thu Jun 06 11:42:08 NZST 2024
 Customer: Peter
 Grand Total: $0.0
 ----
+Sun Jun 09 20:44:34 NZST 2024
+Customer: mrbeats
+Item: Lunar Glieds
+Quantity: 1
+Total: $170.0
+Grand Total: $170.0
+----
+Sun Jun 09 20:55:43 NZST 2024
+Customer: breh
+Item: Lunar Glieds
+Quantity: 1
+Total: $170.0
+Grand Total: $170.0
+----
+Sun Jun 09 20:58:21 NZST 2024
+Customer: peter
+Item: Air Jordan 1
+Quantity: 1
+Total: $150.0
+Grand Total: $150.0
+----
+Sun Jun 09 21:59:16 NZST 2024
+Customer: John Doe
+Item: Panda Dunk Low
+Quantity: 2
+Total: $240.0
+Grand Total: $240.0
+----
+Sun Jun 09 21:59:31 NZST 2024
+Customer: MrBeast
+Item: EcoTreads
+Quantity: 99
+Total: $8910.0
+Grand Total: $8910.0
+----
+Sun Jun 09 22:09:57 NZST 2024
+Customer: Peter
+Item: Astro Boots
+Quantity: 1
+Total: $3000.0
+Grand Total: $3000.0
+----
+Sun Jun 09 22:16:30 NZST 2024
+Customer: John
+Item: New Balance 530
+Quantity: 1
+Total: $100.0
+Grand Total: $100.0
+----

@@ -8,8 +8,9 @@ package onlinestoregui;
  *
  * @author petersun
  */
-public class Shoes extends Product {
 
+// This class represents a shoe product in the online store
+public class Shoes extends Product {
     private final int size;
 
     public Shoes(int id, String name, double price, int size) {
@@ -17,6 +18,7 @@ public class Shoes extends Product {
         this.size = size;
     }
 
+    // Returns the shoe size
     public int getShoeSize() {
         return size;
     }

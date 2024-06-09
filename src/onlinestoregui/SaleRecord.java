@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+
+// This class represents a sale record
 public class SaleRecord {
     private final List<CartItem> items;
     private final String customerName;
@@ -21,6 +23,7 @@ public class SaleRecord {
         System.out.println("SaleRecord initialized for customer: " + customerName);
     }
 
+    // Saves the sale record to a file
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("SalesRecord.txt", true))) {
             String timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(new Date());

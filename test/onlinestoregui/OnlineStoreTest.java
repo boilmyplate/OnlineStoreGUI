@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package onlinestoregui;
 
+import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,136 +10,131 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author emm
- */
+
 public class OnlineStoreTest {
-    
+
+    private OnlineStore instance;
+    private DatabaseManager mockDbManager;
+
     public OnlineStoreTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
-    public void setUp() {
-    }
+    public void setUp() throws Exception {
+        instance = new OnlineStore();
+        
+        mockDbManager = new DatabaseManager() {
+            @Override
+            public void connect() {
+
+            }
+
+            @Override
+            public void disconnect() {
+
+            }
+
+            @Override
+            public Connection getConnection() {
+                return null; 
+            }
+
+            @Override
+            public void commitChanges() {
+                
+            }
+        };
+
     
+        Field dbManagerField = OnlineStore.class.getDeclaredField("dbManager");
+        dbManagerField.setAccessible(true);
+        dbManagerField.set(instance, mockDbManager);
+    }
+
     @After
     public void tearDown() {
+        instance = null;
     }
-
-    /**
-     * Test of addShoes method, of class OnlineStore.
-     */
-    @Test
-    public void testAddShoes() throws Exception {
-        System.out.println("addShoes");
-        Shoes shoe = null;
-        OnlineStore instance = new OnlineStore();
-        instance.addShoes(shoe);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getProducts method, of class OnlineStore.
-     */
+    
+    
+    //Test of getProducts method, of class OnlineStore.
     @Test
     public void testGetProducts() {
         System.out.println("getProducts");
-        OnlineStore instance = new OnlineStore();
-        List<Product> expResult = null;
         List<Product> result = instance.getProducts();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
     }
 
-    /**
-     * Test of addToCart method, of class OnlineStore.
-     */
+
+    //Test of addToCart method, of class OnlineStore.
+
     @Test
     public void testAddToCart() {
         System.out.println("addToCart");
-        Product product = null;
-        int quantity = 0;
-        OnlineStore instance = new OnlineStore();
+        Product product = new Shoes(2, "Another Shoe", 79.99, 40);
+        int quantity = 2;
         instance.addToCart(product, quantity);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Cart cart = instance.getCart();
+        List<CartItem> items = cart.getItems();
+        assertTrue(items.stream().anyMatch(item -> item.getProduct().equals(product) && item.getQuantity() == quantity));
     }
 
-    /**
-     * Test of getCart method, of class OnlineStore.
-     */
+    
+    //Test of getCart method, of class OnlineStore.
     @Test
     public void testGetCart() {
         System.out.println("getCart");
-        OnlineStore instance = new OnlineStore();
-        Cart expResult = null;
         Cart result = instance.getCart();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
+        assertTrue(result.getItems().isEmpty()); // Assuming the cart is initially empty
     }
 
-    /**
-     * Test of saveRecords method, of class OnlineStore.
-     */
+    
+    //Test of saveRecords method, of class OnlineStore.
     @Test
     public void testSaveRecords() {
         System.out.println("saveRecords");
-        String customerName = "";
-        OnlineStore instance = new OnlineStore();
+        Product product = new Shoes(3, "Sample Shoe", 59.99, 38);
+        instance.addToCart(product, 1);
+        String customerName = "Test Customer";
         instance.saveRecords(customerName);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of isValidProduct method, of class OnlineStore.
-     */
+    //Test of isValidProduct method, of class OnlineStore.
     @Test
     public void testIsValidProduct() {
         System.out.println("isValidProduct");
-        int index = 0;
-        OnlineStore instance = new OnlineStore();
-        boolean expResult = false;
-        boolean result = instance.isValidProduct(index);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int validIndex = 0;
+        int invalidIndex = -1;
+        assertTrue(instance.isValidProduct(validIndex));
+        assertFalse(instance.isValidProduct(invalidIndex));
     }
 
-    /**
-     * Test of clearCart method, of class OnlineStore.
-     */
+
+    //Test of clearCart method, of class OnlineStore.
+
     @Test
     public void testClearCart() {
         System.out.println("clearCart");
-        OnlineStore instance = new OnlineStore();
+        Product product = new Shoes(4, "Clear Cart Shoe", 49.99, 39);
+        instance.addToCart(product, 1);
         instance.clearCart();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.getCart().getItems().isEmpty());
     }
 
-    /**
-     * Test of dbShutdown method, of class OnlineStore.
-     */
+
+     //Test of dbShutdown method, of class OnlineStore.
     @Test
     public void testDbShutdown() throws Exception {
         System.out.println("dbShutdown");
-        OnlineStore instance = new OnlineStore();
         instance.dbShutdown();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-    
 }

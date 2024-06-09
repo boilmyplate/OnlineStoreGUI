@@ -7,6 +7,8 @@ package onlinestoregui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,8 +20,9 @@ import java.util.Date;
  *
  * @author petersun
  */
-public class OnlineStoreGUI {
 
+// This class represents the GUI for the online store
+public class OnlineStoreGUI {
     private OnlineStore store;
     private JFrame frame;
     private JList<Product> productList;
@@ -42,7 +45,7 @@ public class OnlineStoreGUI {
         clearCartButton = new JButton("Clear Cart");
         quantityField = new JTextField(5);
         cartArea = new JTextArea(10, 30);
-        cartArea.setEditable(false); // make cart area field read only
+        cartArea.setEditable(false); // Make the cart area non-editable
 
         // Display welcome message
         JOptionPane.showMessageDialog(frame, "Hello, welcome to PJ Sneaker Store", "Welcome", JOptionPane.INFORMATION_MESSAGE);
@@ -75,6 +78,19 @@ public class OnlineStoreGUI {
         clearCartButton.addActionListener(this::clearCart);
         checkoutButton.addActionListener(this::checkout);
 
+        // When gui is closed down commit changes to db and disconnect db
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    store.dbCommit();
+                    store.dbShutdown();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -83,7 +99,7 @@ public class OnlineStoreGUI {
         displayProducts();
     }
 
-    // Add to cart method
+    // Adds the selected product to the cart
     private void addToCart(ActionEvent e) {
         int selectedIndex = productList.getSelectedIndex();
         if (store.isValidProduct(selectedIndex)) {
@@ -107,12 +123,14 @@ public class OnlineStoreGUI {
         }
     }
 
+    // Clears the cart
     private void clearCart(ActionEvent e) {
         store.getCart().clearItems();
         updateCartDisplay();
         JOptionPane.showMessageDialog(frame, "Cart cleared.");
     }
 
+    // Handles the checkout process
     private void checkout(ActionEvent e) {
         if (store.getCart().getItems().isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Your cart is empty. Please add items to the cart before checking out.");
@@ -132,6 +150,7 @@ public class OnlineStoreGUI {
             JOptionPane.showMessageDialog(frame, "Total: $" + totalAmount, "Checkout", JOptionPane.INFORMATION_MESSAGE);
 
             saveRecords(receipt.toString());
+            store.saveRecords(customerName);
 
             store.clearCart();
             updateCartDisplay();
@@ -140,6 +159,7 @@ public class OnlineStoreGUI {
         }
     }
 
+    // Displays the products in the product list
     private void displayProducts() {
         DefaultListModel<Product> model = (DefaultListModel<Product>) productList.getModel();
         model.clear();
@@ -148,6 +168,7 @@ public class OnlineStoreGUI {
         }
     }
 
+    // Updates the cart display area
     private void updateCartDisplay() {
         StringBuilder cartContent = new StringBuilder();
         for (CartItem item : store.getCart().getItems()) {
@@ -156,8 +177,9 @@ public class OnlineStoreGUI {
         cartArea.setText(cartContent.toString());
     }
 
+    // Saves the receipt to a file
     private void saveRecords(String receipt) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Receipt.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Receipt.txt", false))) {
             writer.write(new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(new Date()));
             writer.newLine();
             writer.write("Customer: " + customerName);

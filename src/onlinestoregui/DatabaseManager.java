@@ -12,27 +12,29 @@ import java.util.logging.Logger;
  *
  * @author emm
  */
-public class DatabaseManager {
 
+// This class manages database connections and operations
+public class DatabaseManager {
     private static final String URL = "jdbc:derby:OnlineStoreDB;create=true";
     private static final String USER = "pdc";
     private static final String PASSWORD = "pdc";
 
     private Connection connection;
 
+    // Connects to the database
     public void connect() throws SQLException, ClassNotFoundException {
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
         System.out.println("Connected to the database");
     }
 
+    // Creates the required tables in the database
     public void createTables() throws SQLException {
         String createProductTableSQL = "CREATE TABLE Products ("
                 + "ID INT PRIMARY KEY, "
                 + "NAME VARCHAR(255), "
                 + "PRICE DOUBLE, "
                 + "SIZE INT)";
-
         String createSalesTableSQL = "CREATE TABLE Sales ("
                 + "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
                 + "CUSTOMER_NAME VARCHAR(255), "
@@ -48,6 +50,21 @@ public class DatabaseManager {
         }
     }
 
+    // Inserts a sale record into the Sales table
+    public void insertSaleRecord(String customerName, int productId, int quantity, double total) throws SQLException {
+        String insertSQL = "INSERT INTO Sales (CUSTOMER_NAME, PRODUCT_ID, QUANTITY, TOTAL, SALE_DATE) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertSQL)) {
+            statement.setString(1, customerName);
+            statement.setInt(2, productId);
+            statement.setInt(3, quantity);
+            statement.setDouble(4, total);
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            statement.executeUpdate();
+        }
+        System.out.println("Sale record added for customer: " + customerName);
+    }
+
+    // Adds a new column to the Products table
     public void addColumn() throws SQLException {
         Statement stmt = connection.createStatement();
         String addColumn = "ALTER TABLE Products ADD COLUMN SIZE INT";
@@ -55,6 +72,7 @@ public class DatabaseManager {
         System.out.println("Added column \"SIZE\"");
     }
 
+    // Drops a column from the Products table
     public void dropColumn() throws SQLException {
         Statement stmt = connection.createStatement();
         String dropColumn = "ALTER TABLE Products DROP COLUMN IMAGE_PATH";
@@ -62,8 +80,7 @@ public class DatabaseManager {
         System.out.println("Dropped column \"IMAGE_PATH\"");
     }
 
-    // run if you want to reset a table and reinsert all data
-    // replace table name in deleteData
+    // Deletes all data from the Products table
     public void deleteData() throws SQLException {
         Statement stmt = connection.createStatement();
         String deleteData = "DELETE FROM Products";
@@ -71,26 +88,33 @@ public class DatabaseManager {
         System.out.println("Deleted all data in table \"Products\"");
     }
 
+    // Returns the database connection
     public Connection getConnection() {
         return connection;
     }
 
+    // Commits the changes to the database
     public void commitChanges() {
         try {
             connection.commit();
-            System.out.println("Commited changes");
+            System.out.println("Committed changes");
         } catch (SQLException e) {
             Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
+    // Disconnects from the database and shuts it down
     public void disconnect() {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Database shut down normally");
+                DriverManager.getConnection("jdbc:derby:;shutdown=true");
             } catch (SQLException e) {
-                e.printStackTrace();
+                if (e.getSQLState().equals("XJ015")) {
+                    System.out.println("Database shut down normally.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -100,15 +124,15 @@ public class DatabaseManager {
 /*
             DatabaseManager db = new DatabaseManager();
             db.connect();
-//            db.createTables();
+            db.createTables();
 //                db.addColumn();
 //                db.dropColumn();
-            db.deleteData();
+//            db.deleteData();
 
             db.commitChanges();
             db.disconnect();
 */
-
+             
 
 
 
@@ -122,8 +146,8 @@ public class DatabaseManager {
             store.addShoes(new Shoes(5, "Gala Gaiters", 1700, 10));
             store.addShoes(new Shoes(6, "Lunar Glieds", 170, 7));
             store.addShoes(new Shoes(7, "EcoTreads", 90, 10));
-
-
+            store.addShoes(new Shoes(8,"WalkWise", 129.99, 8));
+            
 
 //            store.createTables();
             // shutdown database
