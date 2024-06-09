@@ -8,8 +8,9 @@ package onlinestoregui;
  *
  * @author petersun
  */
-public class CartItem {
 
+//This class represents an item in the shopping cart
+public class CartItem {
     private final Product product;
     private final int quantity;
 
@@ -18,10 +19,12 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    // Returns the product
     public Product getProduct() {
         return product;
     }
 
+    // Returns the quantity of the product
     public int getQuantity() {
         return quantity;
     }

@@ -14,8 +14,9 @@ import java.util.logging.Logger;
  *
  * @author petersun
  */
-public class OnlineStore {
 
+// This class represents the online store, managing products and the shopping cart
+public class OnlineStore {
     private final List<Product> products;
     private final Cart cart;
     private final DatabaseManager dbManager;
@@ -28,6 +29,7 @@ public class OnlineStore {
         loadProducts();
     }
 
+    // Loads products from the database
     private void loadProducts() throws SQLException {
         String query = "SELECT * FROM Products";
         Connection connection = dbManager.getConnection();
@@ -44,6 +46,7 @@ public class OnlineStore {
         System.out.println("Products loaded from database");
     }
 
+    // Adds a shoe to the database
     public void addShoes(Shoes shoe) throws SQLException {
         products.add(shoe);
         String insertSQL = "INSERT INTO Products (ID, NAME, PRICE, SIZE) VALUES (?, ?, ?, ?)";
@@ -57,19 +60,23 @@ public class OnlineStore {
         System.out.println("Product added: " + shoe.getName());
     }
 
+    // Returns the list of products
     public List<Product> getProducts() {
         return products;
     }
 
+    // Adds a product to the cart
     public void addToCart(Product product, int quantity) {
         cart.addItem(new CartItem(product, quantity));
         System.out.println("Added to cart: " + quantity + " x " + product.getName());
     }
 
+    // Returns the cart
     public Cart getCart() {
         return cart;
     }
 
+    // Saves the sale records to the database and file
     public void saveRecords(String customerName) {
         List<CartItem> items = cart.getItems();
         double totalAmount = 0;
@@ -88,19 +95,23 @@ public class OnlineStore {
         }
     }
 
+    // Validates if the product index is within bounds
     public boolean isValidProduct(int index) {
         return index >= 0 && index < products.size();
     }
 
+    // Clears the cart
     public void clearCart() {
         cart.clearItems();
         System.out.println("Cart cleared.");
     }
 
+    // Commits changes to the database
     public void dbCommit() {
         dbManager.commitChanges();
     }
 
+    // Shuts down the database connection
     public void dbShutdown() throws SQLException {
         dbManager.disconnect();
     }

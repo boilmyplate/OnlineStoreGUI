@@ -56,3 +56,10 @@ Quantity: 1
 Total: $3000.0
 Grand Total: $3000.0
 ----
+Sun Jun 09 22:16:30 NZST 2024
+Customer: John
+Item: New Balance 530
+Quantity: 1
+Total: $100.0
+Grand Total: $100.0
+----

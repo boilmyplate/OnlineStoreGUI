@@ -1,6 +1,6 @@
-Sun Jun 09 22:09:57 NZST 2024
-Customer: Peter
+Sun Jun 09 22:16:30 NZST 2024
+Customer: John
 Receipt:
-1 x Astro Boots: $3000.0 (Size: 8)
-Total: $3000.0
+1 x New Balance 530: $100.0 (Size: 11)
+Total: $100.0
 ----
