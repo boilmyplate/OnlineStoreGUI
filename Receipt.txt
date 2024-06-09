@@ -11,3 +11,10 @@ Receipt:
 7 x New Balance 530 - $100.0
 Total: $1600.0
 ----
+Fri Jun 07 14:09:15 NZST 2024
+Customer: Peter
+Receipt:
+1 x Air Jordan 1 - $150.0
+10 x New Balance 530 - $100.0
+Total: $1150.0
+----
