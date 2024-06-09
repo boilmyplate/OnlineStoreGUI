@@ -1,16 +1,7 @@
-Thu Jun 06 10:57:49 NZST 2024
-Customer: Peter
-Grand Total: $0.0
-----
-Thu Jun 06 10:59:06 NZST 2024
-Customer: bosco
-Grand Total: $0.0
-----
-Thu Jun 06 11:28:24 NZST 2024
-Customer: Peter
-Grand Total: $0.0
-----
-Thu Jun 06 11:42:08 NZST 2024
-Customer: Peter
-Grand Total: $0.0
+Sun Jun 09 22:01:57 NZST 2024
+Customer: Test Customer
+Item: Sample Shoe
+Quantity: 1
+Total: $59.99
+Grand Total: $59.99
 ----

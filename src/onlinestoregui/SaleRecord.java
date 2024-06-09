@@ -6,17 +6,14 @@ package onlinestoregui;
 import java.util.Date;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class SaleRecord {
-    private List<CartItem> items;
-    private String customerName;
+    private final List<CartItem> items;
+    private final String customerName;
 
     public SaleRecord(List<CartItem> items, String customerName) {
         this.items = items;
