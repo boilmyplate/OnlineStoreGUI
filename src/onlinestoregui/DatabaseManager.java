@@ -48,6 +48,19 @@ public class DatabaseManager {
         }
     }
 
+    public void insertSaleRecord(String customerName, int productId, int quantity, double total) throws SQLException {
+        String insertSQL = "INSERT INTO Sales (CUSTOMER_NAME, PRODUCT_ID, QUANTITY, TOTAL, SALE_DATE) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertSQL)) {
+            statement.setString(1, customerName);
+            statement.setInt(2, productId);
+            statement.setInt(3, quantity);
+            statement.setDouble(4, total);
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            statement.executeUpdate();
+        }
+        System.out.println("Sale record added for customer: " + customerName);
+    }
+
     public void addColumn() throws SQLException {
         Statement stmt = connection.createStatement();
         String addColumn = "ALTER TABLE Products ADD COLUMN SIZE INT";
@@ -88,9 +101,13 @@ public class DatabaseManager {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Database shut down normally");
+                DriverManager.getConnection("jdbc:derby:;shutdown=true");
             } catch (SQLException e) {
-                e.printStackTrace();
+                if (e.getSQLState().equals("XJ015")) {
+                    System.out.println("Database shut down normally.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -100,15 +117,15 @@ public class DatabaseManager {
 /*
             DatabaseManager db = new DatabaseManager();
             db.connect();
-//            db.createTables();
+            db.createTables();
 //                db.addColumn();
 //                db.dropColumn();
-            db.deleteData();
+//            db.deleteData();
 
             db.commitChanges();
             db.disconnect();
 */
-
+             
 
 
 
@@ -122,8 +139,8 @@ public class DatabaseManager {
             store.addShoes(new Shoes(5, "Gala Gaiters", 1700, 10));
             store.addShoes(new Shoes(6, "Lunar Glieds", 170, 7));
             store.addShoes(new Shoes(7, "EcoTreads", 90, 10));
-
-
+            store.addShoes(new Shoes(8,"WalkWise", 129.99, 8));
+            
 
 //            store.createTables();
             // shutdown database

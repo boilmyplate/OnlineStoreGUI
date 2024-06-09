@@ -7,6 +7,8 @@ package onlinestoregui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -74,6 +76,20 @@ public class OnlineStoreGUI {
         addToCartButton.addActionListener(this::addToCart);
         clearCartButton.addActionListener(this::clearCart);
         checkoutButton.addActionListener(this::checkout);
+        
+        // when gui is closed down
+        // commit changes to db and disconnect db
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    store.dbCommit();
+                    store.dbShutdown();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -132,6 +148,7 @@ public class OnlineStoreGUI {
             JOptionPane.showMessageDialog(frame, "Total: $" + totalAmount, "Checkout", JOptionPane.INFORMATION_MESSAGE);
 
             saveRecords(receipt.toString());
+            store.saveRecords(customerName);
 
             store.clearCart();
             updateCartDisplay();
@@ -157,7 +174,7 @@ public class OnlineStoreGUI {
     }
 
     private void saveRecords(String receipt) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Receipt.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Receipt.txt", false))) {
             writer.write(new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(new Date()));
             writer.newLine();
             writer.write("Customer: " + customerName);

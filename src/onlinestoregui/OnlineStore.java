@@ -71,9 +71,21 @@ public class OnlineStore {
     }
 
     public void saveRecords(String customerName) {
-        SaleRecord saleRecord = new SaleRecord(cart.getItems(), customerName);
-        saleRecord.save();
-        System.out.println("Records saved for customer: " + customerName);
+        List<CartItem> items = cart.getItems();
+        double totalAmount = 0;
+        for (CartItem item : items) {
+            totalAmount += item.getQuantity() * item.getProduct().getPrice();
+        }
+
+        SaleRecord saleRecord = new SaleRecord(items, customerName);
+        saleRecord.save();  // Save to file
+        try {
+            for (CartItem item : items) {
+                dbManager.insertSaleRecord(customerName, item.getProduct().getId(), item.getQuantity(), item.getQuantity() * item.getProduct().getPrice());
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(OnlineStore.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     public boolean isValidProduct(int index) {
