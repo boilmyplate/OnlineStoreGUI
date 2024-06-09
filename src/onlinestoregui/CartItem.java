@@ -9,8 +9,9 @@ package onlinestoregui;
  * @author petersun
  */
 public class CartItem {
-    private Product product;
-    private int quantity;
+
+    private final Product product;
+    private final int quantity;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
@@ -23,5 +24,10 @@ public class CartItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public String toString() {
+        return quantity + " x " + product.toString();
     }
 }
